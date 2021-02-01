@@ -1,0 +1,55 @@
+buildscript {
+    ext.android_gradle_plugin_version = '3.6.3'
+    repositories {
+        mavenLocal()
+        google()
+        jcenter()
+        maven { url "https://maven.google.com" }
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url 'https://dl.bintray.com/flank/maven' }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+        maven { url "https://nexus.azimo.com/repository/maven-releases/" }
+    }
+    dependencies {
+        classpath("net.researchgate:gradle-release:2.6.0")
+        classpath "com.android.tools.build:gradle:$android_gradle_plugin_version"
+        classpath "com.azimolabs.publishing:artifact-uploader-plugin:2.0"
+        classpath "com.osacky.flank.gradle:fladle:0.11.0"
+    }
+}
+
+plugins {
+    id 'net.researchgate.release' version '2.6.0'
+}
+
+subprojects {
+
+    buildscript {
+        repositories {
+            mavenLocal()
+            maven { url "https://nexus.azimo.com/repository/maven-releases/" }
+        }
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        jcenter()
+        maven { url "https://maven.google.com" }
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url 'https://dl.bintray.com/flank/maven' }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+
+}
+
+task build {
+    dependsOn ':api:build', ':processor:build'
+}
+
+task clean {
+    dependsOn ':api:clean', ':processor:clean', ':example:app:clean'
+}
+
+afterReleaseBuild.dependsOn ':api:publish', ':processor:publish'

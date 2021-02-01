@@ -1,0 +1,20 @@
+apply plugin: 'java'
+apply plugin: 'java-library'
+apply plugin: 'com.azimolabs.publishing.artifact-uploader-plugin'
+
+azimoPublishing.artifactName = 'api'
+
+dependencies {
+    // internals of how deeplink is analysed and parsed
+    implementation 'com.squareup.okio:okio:2.2.0'
+    // generated code uses @Inject so it's easier to use generated injectors
+    api 'javax.inject:javax.inject:1'
+    // Nullable annotation
+    api 'com.google.code.findbugs:jsr305:3.0.2'
+    // CheckReturnValue annotation
+    api 'com.google.errorprone:error_prone_annotations:2.3.3'
+
+    testImplementation 'junit:junit:4.13'
+    // use classes defined in android framework
+    compileOnly "com.google.android:android:4.1.1.4"
+}

@@ -1,0 +1,4 @@
+rootProject.name = 'daggerextensions'
+include ':api'
+include ':processor'
+include ':example:app'

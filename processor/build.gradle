@@ -1,0 +1,59 @@
+import org.gradle.internal.jvm.Jvm
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'com.azimolabs.publishing.artifact-uploader-plugin'
+
+azimoPublishing.artifactName = 'processor'
+
+dependencies {
+    implementation project(':api')
+
+    // hook auto configuration?
+    annotationProcessor "com.google.auto.service:auto-service:1.0-rc7"
+    // provide dependencies of processor 
+    compileOnly 'com.google.auto.service:auto-service-annotations:1.0-rc7'
+    implementation 'com.google.auto:auto-common:0.10'
+
+    // code generation
+    implementation "com.squareup:javapoet:1.11.1"
+    // common library
+    implementation 'com.google.guava:guava:27.1-jre'
+
+    // test environment needs to have dagger dependencies
+    testRuntimeOnly 'com.google.dagger:dagger:2.27'
+    // test environment needs to have android dependencies as well
+    testRuntimeOnly "com.google.android:android:4.1.1.4"
+    // can't really tell, something about sun not present
+    testImplementation files(Jvm.current().getToolsJar())
+    // testing infrastructure
+    testImplementation 'junit:junit:4.13'
+    // well, you probably know this one
+    testImplementation 'org.mockito:mockito-core:3.1.0'
+    // testing utils
+    testImplementation 'com.google.testing.compile:compile-testing:0.15'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+}
+buildscript {
+    ext.kotlin_version = '1.4.0'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+repositories {
+    mavenCentral()
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
